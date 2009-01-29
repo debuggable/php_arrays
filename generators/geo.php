@@ -64,12 +64,12 @@ class GeoName{
 		}
 		return array(
 			'timezone_id' => $row[0],
-			($header[1]['type'].'_offset') => array(
-				$header[1]['day'] => $row[1]
-			),
-			($header[2]['type'].'_offset') => array(
-				$header[2]['day'] => $row[1],
-			),
+			// ($header[1]['type'].'_offset') => array(
+			// 	$header[1]['day'] => $row[1]
+			// ),
+			// ($header[2]['type'].'_offset') => array(
+			// 	$header[2]['day'] => $row[1],
+			// ),
 		);
 	}
 
