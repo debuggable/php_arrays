@@ -15,6 +15,11 @@ class GeoName{
 			'srcFile' => 'cities15000.txt',
 			'map' => '_mapCity'
 		),
+		'time_zones.php' => array(
+			'src' => 'http://download.geonames.org/export/dump/timeZones.txt',
+			'srcFile' => '.txt',
+			'map' => '_mapTimeZone'
+		),
 	);
 
 	public static function generate($file) {
@@ -25,18 +30,47 @@ class GeoName{
 
 		$items = array();
 		$fp = fopen($srcFile, "r");
+		$i = 0;
 		while (($row = fgetcsv($fp, 0, "\t")) !== false) {
 			if (count($row) == 1 || preg_match('/^#/', $row[0])) {
 				continue;
 			}
 
-			$items[] = call_user_func(array('GeoName', $map), $row);
+			$i++;
+			$item = call_user_func(array('GeoName', $map), $row, $i);
+			if ($item) {
+				$items[] = $item;
+			}
 		}
 
 		echo sprintf("-> Writing %s\n", $file);
 
 		$out = PhpArray::generate(compact('src', 'items'));
 		file_put_contents(ROOT . '/' . $file, $out);
+	}
+
+	protected static function _mapTimeZone($row, $i) {
+		static $header;
+		if ($i == 1) {
+			$header = $row;
+			foreach ($header as $key => $val) {
+				if (!preg_match('/(gmt|dst).+(\d+\. \w+ \d{4})$/i', $val, $match)) {
+					continue;
+				}
+				$day = date('Y-m-d', strtotime($match[2]));
+				$header[$key] = array('type' => strtolower($match[1]), 'day' => $day);
+			}
+			return false;
+		}
+		return array(
+			'timezone_id' => $row[0],
+			($header[1]['type'].'_offset') => array(
+				$header[1]['day'] => $row[1]
+			),
+			($header[2]['type'].'_offset') => array(
+				$header[2]['day'] => $row[1],
+			),
+		);
 	}
 
 	protected static function _mapCountry($row) {
@@ -87,6 +121,7 @@ class GeoName{
 	}
 }
 
+GeoName::generate('time_zones.php');
 GeoName::generate('countries.php');
 GeoName::generate('big_cities.php');
 
