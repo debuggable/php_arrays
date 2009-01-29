@@ -1,8 +1,9 @@
 #!/usr/bin/php
 <?php
-define('ROOT', dirname(dirname(__FILE__)));
+require_once('libs/php_array.php');
 
-$html = file_get_contents('http://www.mimetype.org/');
+$src = 'http://www.mimetype.org/';
+$html = file_get_contents($src);
 $regex = '/<tr><td>([^<]+)<\/td><td>([^<]+)<\/td><\/tr>/';
 preg_match_all($regex, $html, $matches, PREG_SET_ORDER);
 
@@ -15,15 +16,12 @@ foreach ($matches as $match) {
 	}
 }
 
-$template = "<?php\n\$items = %s;\n?>";
 
-$out = sprintf($template, var_export($items, true));
-$out = preg_replace('/array \(/', 'array(', $out);
-file_put_contents(ROOT . '/ext2mime.php', $out);
+$out = PhpArray::generate(compact('src', 'items'));
+file_put_contents(ROOT . '/extensions.php', $out);
 
 $items = array_flip($items);
-$out = sprintf($template, var_export($items, true));
-$out = preg_replace('/array \(/', 'array(', $out);
-file_put_contents(ROOT . '/mime2ext.php', $out);
+$out = PhpArray::generate(compact('src', 'items'));
+file_put_contents(ROOT . '/mime_types.php', $out);
 
 ?>
