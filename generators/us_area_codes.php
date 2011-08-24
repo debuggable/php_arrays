@@ -8,7 +8,6 @@ $data = <<<END
 END;
 
 foreach ( explode( "\n", trim( $data ) ) as $line ) {
-
 	list( $state, $area_codes ) = array_map( function( $v ){ return str_replace( ',', '', $v ); }, preg_split( '~(?<=[a-zA-Z])\s+(?=\d)~s', $line ) );
 	$area_codes = preg_split( '~\s+~', trim( $area_codes ) );
 	foreach( $area_codes as $area_code ) {
