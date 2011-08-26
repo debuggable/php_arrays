@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @link https://github.com/galen/php_arrays
+ * @author Galen Grover (galenjr@gmail.com)
+ * array version of this page http://econym.org.uk/gmap/states.xml
+ **/
 $items = array(
 	'Alaska' => array(
 		array( 'lat' => 70.0187, 'lng' => -141.0205 ),

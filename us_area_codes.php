@@ -1,6 +1,6 @@
 <?php
 /**
- * @link http://github.com/debuggable/php_arrays/tree
+ * @link https://github.com/galen/php_arrays
  * @author Galen Grover (galenjr@gmail.com)
  **/
 $items = array(
