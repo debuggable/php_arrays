@@ -12,7 +12,7 @@ foreach ($matches as $match) {
 	list(, $mimeType, $extensions) = $match;
 	$extensions = preg_split('/\s+/', $extensions);
 	foreach ($extensions as $ext) {
-		$items[$ext] = $mimeType;
+	$items[$ext] = $mimeType;
 	}
 }
 
